@@ -1,0 +1,25 @@
+# # Метаданные пакета
+# $package:
+#   # Идентификатор пакета
+#   timeMachine:
+#     # Краткое название пакета
+#     name: Time Machine
+#     # Поставщик
+#     vendor: Sber & @altershaman
+#     # Описание
+#     description: Расширение SEAF для управления статусами архитектурных объектов
+#     # Версия
+#     version: 0.1.0
+#     # Зависимости от других пакетов
+#     dependencies:
+#       seaf-core: ">=1.2.3"
+#       hexagon: ">=1.1.0"
+#       dochub: ">=3.9.0"
+
+imports:
+  - entities/seaf_core_ext.yaml
+  - entities/horizons.yaml
+  - entities/state_models.yaml
+  - docs/docs.yaml
+
+

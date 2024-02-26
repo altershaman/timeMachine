@@ -1,0 +1,70 @@
+entities:
+
+  seaf.horizons:
+    title: Периоды
+    description: >
+      Именованные временнЫе периоды для использования вместе со статусами
+    schema:
+      type: object
+      patternProperties:
+        "[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]*)*$":
+          type: object
+          properties:
+            title:
+              title: Наименование периода
+              type: string
+            begins:
+              title: Дата начала
+              type: string
+              format: "date"
+            ends:
+              title: Дата окончания
+              type: string
+              format: "date"
+          required:
+            - title
+            - begins
+            - ends
+    
+    objects:
+      horizon:
+        route: "/"
+        title: Период
+        symbol: "horizon"
+
+    presentations:
+
+      horizons_defined_list:
+        type: markdown
+        template: "templates/horizons_list.md"
+        source: >
+          (
+            $horizons:= $spread($."seaf.horizons");
+            $count($horizons)=0
+            ? {"error": "no horizons defined"} : {}
+          )
+
+      horizons_defined_gantt:
+        type: PlantUml
+        template: templates/horizons_gantt.puml
+        source: >
+          (
+            $horizons:= $spread($."seaf.horizons")^(<*.begins, >*.ends);
+            {
+              "start": $horizons[0].*.begins,
+              "time_frames":  $map($horizons, function($v) {
+                                {
+                                  "id": $keys($v),
+                                  "body": $v.*
+                                }
+                              })
+            }
+          )
+
+    menu: >
+      (
+        {
+          "location": "Документы/Time Machine/Справочники/Горизонты планирования",
+          "link": "/entities/seaf.horizons/horizons_defined_list"
+        }
+      )

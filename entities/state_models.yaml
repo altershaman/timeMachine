@@ -1,0 +1,102 @@
+entities:
+
+  seaf.state_models:
+    title: Модели состояний
+      
+    schema:
+      type: object
+      patternProperties:
+        "[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]*)*$":
+          type: object
+          properties:
+            title:
+              title: Наименование модели
+              type: string
+            description:
+              title: Краткое описание применимости модели
+              type: string
+          required:
+            - title
+            - description
+
+    objects:
+      model:
+        route: "/"
+        title: Модель состояний
+        symbol: "state_model"
+
+    presentations:
+      
+      models_overview:
+        type: markdown
+        template: templates/models_overview.md
+        source: >
+          (
+            $models:= $spread($."seaf.state_models");
+            $count($models)=0
+            ? {"error": "no models defined"}
+            : {"models":  $map($models, function($v) {
+                            {"id": $keys($v),
+                             "body": $v.*}
+                          })
+              }
+          )
+
+      model_graph:
+        type: PlantUml
+        template: templates/model_graph.puml
+        source: >
+          (
+            $model_id:= $params.id;
+            $model:= $lookup($."seaf.state_models", $model_id);
+            $states:= $spread($."seaf.states")[$.*.model = $model_id];
+            {
+              "id": $model_id,
+              "body": $model,
+              "states": $map($states, function($v) {
+                          {
+                            "id": $keys($v),
+                            "body": $v.*
+                          }
+                        })
+            }
+          )
+
+    menu: >
+      (
+        {
+          "location": "Документы/Time Machine/Справочники/Модели состояний",
+          "link": "/entities/seaf.state_models/models_overview"
+        }
+      )
+
+  seaf.states:
+    title: Состояния
+    description: >
+      Объявление одного из состояний в привязке к модели состояний.
+    schema:
+      type: object
+      patternProperties:
+        "[a-zA-Z0-9_]*(\\.[a-zA-Z0-9_]*)*$":
+          type: object
+          properties:
+            title:
+              title: Наименование состояния
+              type: string
+            description:
+              title: Краткое описание состояния
+              type: string
+            model:
+              title: Указание на модель состояний
+              type: string
+              $ref: "#/$rels/seaf.state_models.model"
+          required:
+            - title
+            - description
+            - model
+            
+    objects:
+      state:
+        route: "/"
+        title: Состояние
+        symbol: "state"

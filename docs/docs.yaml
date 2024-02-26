@@ -1,0 +1,6 @@
+docs:
+  tm_main:
+    location: Time Machine/Обзор
+    description: TM docs entry point
+    type: markdown
+    source: tm_main.md

@@ -1,0 +1,12 @@
+@startgantt
+
+projectscale monthly
+
+Project starts {{start}}
+
+{{#time_frames}}
+[{{body.title}} (id {{id}})] starts {{body.begins}}
+[{{body.title}} (id {{id}})] ends {{body.ends}}
+{{/time_frames}}
+
+@endgantt

@@ -1,0 +1,12 @@
+@startmindmap
+*:<b>{{body.title}}</b>
+({{id}})
+;
+
+{{#states}}
+**:<b>{{body.title}}</b>
+({{id}})
+{{body.description}}
+;
+{{/states}}
+@endmindmap
